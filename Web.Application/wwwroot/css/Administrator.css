@@ -1,0 +1,36 @@
+﻿/* CSS Variables */
+:root {
+    --primary: #ddd;
+    --dark: #333;
+    --light: #fff;
+    --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
+}
+
+.ma {
+    background: var(--primary) !important;
+    display: block;
+    text-decoration: none;
+    padding: 0.8rem;
+    text-align: center;
+    color: var(--dark) !important;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow) !important;
+}
+    .ma:hover {
+        background: var(--dark) !important;
+        color: var(--light) !important;
+    }
+    .active {
+        background: var(--dark) !important;
+        color: var(--light) !important;
+    }
+
+.mad {
+    background: var(--light) !important;
+    color: var(--dark) !important;
+}
+    .mad:hover {
+        background: var(--dark) !important;
+        color: var(--light) !important;
+    }

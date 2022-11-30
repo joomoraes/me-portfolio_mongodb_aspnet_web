@@ -1,0 +1,47 @@
+﻿@model Web.Application.Domain.Entities.Users
+
+<ul class="nav nav-tabs">
+    <li class="nav-item ma">
+        <a href="#1a" class="nav-link active mad" aria-current="page" data-toggle="tab">Users</a>
+    </li>
+    <li class="nav-item ma">
+        <a href="#2a" class="nav-link mad" data-toggle="tab">Users Register</a>
+    </li>
+    <li class="nav-item ma">
+        <a href="#3a" class="nav-link mad" data-toggle="tab">Send a Newslatter</a>
+    </li>
+    <li class="nav-item ma">
+        <a href="#4a" class="nav-link mad" data-toggle="tab">BI Users</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="1a">
+            <table class="table table-dark" id="usertable">
+           </table>
+    </div>
+
+    <div class="tab-pane container-fluid" id="2a">
+    </div>
+
+    <div class="tab-pane" id="3a">
+        <h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>
+    </div>
+    <div class="tab-pane" id="4a">
+        <h3>We use css to change the background color of the content to be equal to the tab</h3>
+    </div>
+</div>    
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $.get('@Url.Action("FindUsers", "Administrator")', function (content) {
+        $("#usertable").html(content);
+    });
+
+    $.get('@Url.Action("UserRegister", "Administrator")', function (content) {
+        $("#2a").html(content);
+    });
+</script>
+
+
+
