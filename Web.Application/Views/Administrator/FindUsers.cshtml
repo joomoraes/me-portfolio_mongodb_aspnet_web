@@ -33,7 +33,23 @@
     </tbody>
 }
 
+
+
+
 <script>
+
+    function UserUpdate(id)
+    {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetToUpdate", "Administrator")',
+            data: { id: id },
+            success: function (result) {
+                $('#exampleModal').modal('show');
+                $('#contentUserUpdate').html(result);
+            }
+        });
+    }
 
     function UserDelete(id)
     {

@@ -3,6 +3,20 @@
 <ul class="nav nav-tabs">
     <li class="nav-item ma">
         <a href="#1a" class="nav-link active mad" aria-current="page" data-toggle="tab">Users</a>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
+                    </div>
+                    <div class="modal-body" id="contentUserUpdate">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="updateUser()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </li>
     <li class="nav-item ma">
         <a href="#2a" class="nav-link mad" data-toggle="tab">Users Register</a>
@@ -30,6 +44,7 @@
         <h3>We use css to change the background color of the content to be equal to the tab</h3>
     </div>
 </div>    
+
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

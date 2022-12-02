@@ -4,6 +4,7 @@ namespace Web.Application.Data.Schemas
     using global::MongoDB.Bson;
     using global::MongoDB.Bson.Serialization.Attributes;
     using SharpCompress.Compressors.PPMd;
+    using System.Security.Cryptography;
     using Web.Application.Domain.Entities;
     using Web.Application.Domain.Enums;
     using Web.Application.Domain.ValueObjects;
@@ -25,9 +26,12 @@ namespace Web.Application.Data.Schemas
         public static Users ParseToDomain(this UserSchema document)
         {
             var user = new Users(
+                document.Id,
                 document.Username, 
                 document.Email,
-                document.Profile);
+                document.Password,
+                document.Profile
+                );
 
             var person = new Person( 
                 document.Person.ZipCode, document.Person.City,
