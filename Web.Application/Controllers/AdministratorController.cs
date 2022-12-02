@@ -97,6 +97,68 @@ using Microsoft.AspNetCore.Mvc;
                 data = $"totall of exclude{resultUserRemoved} users with {resultJornalsRemoved} interactive"
             });
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetToUpdate(string id)
+        {
+            var user = await _usersRepository.GetById(id);
+
+            if (user == null)
+                return NotFound();
+
+            var model = new UserUpdate
+            {
+                Id = id,
+                Password = user.Password,
+                Country = user.Person.Country,
+                Email = user.Email,
+                Profile = user.Profile,
+                State = user.Person.State,
+                Username = user.Username,
+                City = user.Person.City,
+                ZipCode = user.Person.ZipCode
+            };
+
+            return PartialView("UpdateUser", model);
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateUser(UserUpdate models)
+        {
+            var user = await _usersRepository.GetById(models.Id);
+
+            if (user == null)
+                return NotFound();
+
+
+            user = new Users(models.Id, models.Username, models.Email, models.Password, models.Profile);
+            var personN = new Person(models.ZipCode, models.City, models.State, models.Country);
+
+            user.AtributePerson(personN);
+
+            if(!user._Validate())
+            {
+                return BadRequest(new
+                {
+                    errors = user.ValidationResult.Errors.Select(_ => _.ErrorMessage)
+                });
+            }
+
+            if(!_usersRepository.Update(user))
+            {
+                return BadRequest(new
+                {
+                    data = "None documents was update!"
+                });
+            }
+
+            return Ok(new
+            {
+                data = "Users was update successful"
+            });
+        }
+
     }
 
 }

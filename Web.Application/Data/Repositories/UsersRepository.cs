@@ -75,6 +75,31 @@
 
             return document.ParseToDomain();
         }
-        
+
+        public bool Update(Users users)
+        {
+            var document = new UserSchema
+            {
+                Id = users.Id,
+                Email = users.Email,
+                Password = users.Password,
+                Profile = users.Profile,
+                Username = users.Username,
+                Person = new PersonSchema
+                {
+                    Biograpphy = users.Person.Biography,
+                    City = users.Person.City,
+                    Country = users.Person.Country,
+                    Medals = users.Person.Medals,
+                    State = users.Person.State,
+                    TotalSponser = users.Person.TotalSponser,
+                    ZipCode = users.Person.ZipCode
+                }
+            };
+
+            var result = _users.ReplaceOne(_ => _.Id == document.Id, document);
+
+            return result.ModifiedCount > 0;
+        }
     }
 }
