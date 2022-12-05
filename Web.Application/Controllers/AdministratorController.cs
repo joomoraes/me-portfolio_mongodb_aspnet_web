@@ -18,13 +18,11 @@ using Microsoft.AspNetCore.Mvc;
             _usersRepository = usersRepository;
         }
         public IActionResult Index()
-        {
-            return View();
-        }
+            => View();
 
         [HttpGet]
-        public async Task<ActionResult> UserRegister()
-            => PartialView();
+        public async Task<IActionResult> UserRegister()
+            =>  PartialView();
 
         [HttpPost]
         public async Task<IActionResult> UserRegister(IncludeUsers users)
@@ -54,7 +52,7 @@ using Microsoft.AspNetCore.Mvc;
                 });
             }
 
-            _usersRepository.Insert(user);
+             _usersRepository.Insert(user);
 
             return Ok(new
             {
@@ -64,7 +62,7 @@ using Microsoft.AspNetCore.Mvc;
         }
 
         [HttpGet]
-        public async Task<ActionResult> FindUsers()
+        public async Task<IActionResult> FindUsers()
         {
             var users = await _usersRepository.GetAll();
 
@@ -83,9 +81,9 @@ using Microsoft.AspNetCore.Mvc;
         }
 
         [HttpGet]
-        public async Task<ActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = _usersRepository.GetById(id);
+            var user = await _usersRepository.GetById(id);
 
             if (user == null)
                 return NotFound();
@@ -99,7 +97,7 @@ using Microsoft.AspNetCore.Mvc;
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetToUpdate(string id)
+        public async Task<IActionResult> GetToUpdate(string id)
         {
             var user = await _usersRepository.GetById(id);
 
@@ -124,7 +122,7 @@ using Microsoft.AspNetCore.Mvc;
         }
 
         [HttpPost]
-        public async Task<ActionResult> UpdateUser(UserUpdate models)
+        public async Task<IActionResult> UpdateUser(UserUpdate models)
         {
             var user = await _usersRepository.GetById(models.Id);
 
