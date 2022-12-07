@@ -3,6 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<Web.Application.Data.MongoDB>();
 builder.Services.AddScoped<Web.Application.Data.Repositories.UsersRepository>();
+builder.Services.AddScoped<Web.Application.Data.Repositories.PostsRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

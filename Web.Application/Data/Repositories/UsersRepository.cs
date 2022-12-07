@@ -4,6 +4,7 @@
     using Web.Application.Data.Schemas;
     using Web.Application.Domain.Entities;
     using Web.Application.Domain.ValueObjects;
+    using ZstdSharp.Unsafe;
 
     public class UsersRepository 
     {
@@ -22,6 +23,7 @@
                 Email = users.Email,
                 Password = users.Password,
                 Profile = users.Profile,
+                CreateAt = users.CreateAt,
                 Person = new PersonSchema
                 {
                     Biograpphy = users.Person.Biography,
@@ -46,6 +48,7 @@
                     d.Username,
                     d.Email,
                     d.Password,
+                    d.CreateAt,
                     d.Profile);
                 var e = new Person(d.Person.City,
                     d.Person.Country,

@@ -2,7 +2,7 @@
 namespace Web.Application.Controllers
 {
 
-using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc;
     using Web.Application.Controllers.Inputs;
     using Web.Application.Controllers.Outputs;
     using Web.Application.Data.Repositories;
@@ -13,9 +13,13 @@ using Microsoft.AspNetCore.Mvc;
     public class AdministratorController : Controller
     {
         private readonly UsersRepository _usersRepository;
-        public AdministratorController(UsersRepository usersRepository)
+        private readonly PostsRepository _postRepository;
+        public AdministratorController(UsersRepository usersRepository,
+            PostsRepository postsRepository)
         {
             _usersRepository = usersRepository;
+            _postRepository = postsRepository;
+
         }
         public IActionResult Index()
             => View();
@@ -34,6 +38,7 @@ using Microsoft.AspNetCore.Mvc;
                 users.Username,
                 users.Email,
                 users.Password,
+                DateTime.Now,
                 profile);
 
             var person = new Person(
@@ -130,8 +135,17 @@ using Microsoft.AspNetCore.Mvc;
                 return NotFound();
 
 
-            user = new Users(models.Id, models.Username, models.Email, models.Password, models.Profile);
-            var personN = new Person(models.ZipCode, models.City, models.State, models.Country);
+            user = new Users(models.Id,
+                models.Username,
+                models.Email,
+                models.Password,
+                DateTime.Now,
+                models.Profile);
+            var personN = new Person(
+                models.ZipCode,
+                models.City,
+                models.State,
+                models.Country);
 
             user.AtributePerson(personN);
 
@@ -157,6 +171,72 @@ using Microsoft.AspNetCore.Mvc;
             });
         }
 
+       
+        [HttpGet]
+        public async Task<IActionResult> PostRegister()
+            =>  PartialView();
+
+        [HttpGet]
+        public async Task<IActionResult> FindPosts()
+        {
+            var posts = await _postRepository.GetAll();
+
+            var list = posts.Select(_ => new PostList
+            {
+                Id = _.Id,
+                Text = _.Text,
+                Title = _.Title,
+                Name = _usersRepository.GetById(_.UserId ?? "638671fc2a61c98808e19051").Result.Username ?? "",
+                CreateAt = _.CreateAt
+            });
+
+            return PartialView(list);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostRegister(IncludePosts posts)
+        {
+            var post = new Post(
+                posts.Title,
+                posts.Text,
+                posts.Image.ToString(),
+                1,
+                DateTime.Now,
+                posts.UserId
+                );
+
+            if(!post._Validate())
+            {
+                return BadRequest(new
+                {
+                    error = post.ValidationResult.Errors.Select(_ => _.ErrorMessage)
+                });
+            }
+
+            _postRepository.Insert(post.UserId, post);
+
+            return Ok(new
+            {
+                data = "Successful! Insert new user"
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PostDelete(string id)
+        {
+            var post = await _postRepository.GetById(id);
+
+            if (post == null)
+                return NotFound();
+
+            (var resultPostRemoved, var resultRemoved) = _postRepository.Remove(id);
+
+            return Ok(new
+            {
+                data = $"total of excluded {resultPostRemoved} user with {resultRemoved} interctive"
+            });
+
+        }
     }
 
 }

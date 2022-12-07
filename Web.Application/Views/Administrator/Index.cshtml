@@ -46,15 +46,53 @@
 </div>    
 
 
+<ul class="nav nav-tabs">
+    <li class="nav-item ma">
+        <a href="#5a" class="nav-link active mad" aria-current="page" data-toggle="tab">Posts</a>
+    </li>
+    <li class="nav-item ma">
+        <a href="#6a" class="nav-link mad" data-toggle="tab">Posts Register</a>
+    </li>
+    <li class="nav-item ma">
+        <a href="#7a" class="nav-link mad" data-toggle="tab">Send a Newslatter</a>
+    </li>
+    <li class="nav-item ma">
+        <a href="#8a" class="nav-link mad" data-toggle="tab">BI Posts</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="5a">
+        <table class="table table-dark" id="posttables">
+        </table>
+    </div>
+    <div class="tab-pane container-fluid" id="6a">
+    </div>
+    <div class="tab-pane" id="7a">
+        <h3>Send a News Latter</h3>
+    </div>
+    <div class="tab-pane" id="8a">
+        <h3>BI Posts</h3>
+    </div>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    $.get('@Url.Action("FindPosts", "Administrator")', function (content) {
+        $("#posttables").html(content);
+    });
+     
     $.get('@Url.Action("FindUsers", "Administrator")', function (content) {
         $("#usertable").html(content);
     });
 
     $.get('@Url.Action("UserRegister", "Administrator")', function (content) {
         $("#2a").html(content);
+    }); 
+    
+    $.get('@Url.Action("PostRegister", "Administrator")', function (content) {
+        $("#6a").html(content);
     });
 </script>
 

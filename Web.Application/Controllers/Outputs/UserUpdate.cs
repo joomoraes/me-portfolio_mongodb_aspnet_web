@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using Web.Application.Domain.Enums;
 
 namespace Web.Application.Controllers.Outputs
@@ -31,6 +32,8 @@ namespace Web.Application.Controllers.Outputs
 
         [Display(Name = "ZipCode")]
         public string ZipCode { get; set; }
+
+        public DateTime? UpdateAt { get; set; }
 
     }
 }
