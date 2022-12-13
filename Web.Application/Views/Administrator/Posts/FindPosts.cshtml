@@ -1,5 +1,5 @@
-﻿@using Web.Application.Controllers.Outputs
-@model IEnumerable<Web.Application.Controllers.Outputs.PostList>
+﻿@using Web.Application.Domain.Dtos.Posts
+@model IEnumerable<Web.Application.Domain.Dtos.Posts.PostDto>
 <thead>
     <tr>
         <th scope="col">Title</th>
@@ -10,7 +10,7 @@
         <th scope="col">update</th>
     </tr>
 </thead>
-@foreach (var item in Model ?? new List<PostList>())
+@foreach (var item in Model ?? new List<PostDto>())
 {
     <tbody>
         <tr>

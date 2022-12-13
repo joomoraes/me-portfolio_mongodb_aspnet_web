@@ -3,9 +3,9 @@ namespace Web.Application.Controllers
 {
 
     using Microsoft.AspNetCore.Mvc;
-    using Web.Application.Controllers.Inputs;
-    using Web.Application.Controllers.Outputs;
     using Web.Application.Data.Repositories;
+    using Web.Application.Domain.Dtos.Posts;
+    using Web.Application.Domain.Dtos.Users;
     using Web.Application.Domain.Entities;
     using Web.Application.Domain.Enums;
     using Web.Application.Domain.ValueObjects;
@@ -26,10 +26,10 @@ namespace Web.Application.Controllers
 
         [HttpGet]
         public async Task<IActionResult> UserRegister()
-            =>  PartialView();
+            =>  PartialView("Users/UserRegister");
 
         [HttpPost]
-        public async Task<IActionResult> UserRegister(IncludeUsers users)
+        public async Task<IActionResult> UserRegister(CreateDtoUsers users)
         {
             var profile = EProfileHelper.ParseToInt(users.Profile);
 
@@ -71,7 +71,7 @@ namespace Web.Application.Controllers
         {
             var users = await _usersRepository.GetAll();
 
-            var list = users.Select(_ => new UsersList
+            var list = users.Select(_ => new UserDto
             {
                 Id = _.Id,
                 Username = _.Username,
@@ -82,7 +82,7 @@ namespace Web.Application.Controllers
                 ZipCode = _.Person.ZipCode ?? ""
             });
 
-            return PartialView(list);
+            return PartialView("Users/FindUsers", list);
         }
 
         [HttpGet]
@@ -109,7 +109,7 @@ namespace Web.Application.Controllers
             if (user == null)
                 return NotFound();
 
-            var model = new UserUpdate
+            var model = new UpdateDtoUsers
             {
                 Id = id,
                 Password = user.Password,
@@ -122,12 +122,12 @@ namespace Web.Application.Controllers
                 ZipCode = user.Person.ZipCode
             };
 
-            return PartialView("UpdateUser", model);
+            return PartialView("Users/UpdateUser", model);
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUser(UserUpdate models)
+        public async Task<IActionResult> UpdateUser(UpdateDtoUsers models)
         {
             var user = await _usersRepository.GetById(models.Id);
 
@@ -174,14 +174,14 @@ namespace Web.Application.Controllers
        
         [HttpGet]
         public async Task<IActionResult> PostRegister()
-            =>  PartialView();
+            =>  PartialView("Posts/PostRegister");
 
         [HttpGet]
         public async Task<IActionResult> FindPosts()
         {
             var posts = await _postRepository.GetAll();
 
-            var list = posts.Select(_ => new PostList
+            var list = posts.Select(_ => new PostDto
             {
                 Id = _.Id,
                 Text = _.Text,
@@ -190,11 +190,11 @@ namespace Web.Application.Controllers
                 CreateAt = _.CreateAt
             });
 
-            return PartialView(list);
+            return PartialView("Posts/FindPosts", list);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostRegister(IncludePosts posts)
+        public async Task<IActionResult> PostRegister(CreateDtoPosts posts)
         {
             var post = new Post(
                 posts.Title,
