@@ -2,8 +2,10 @@
 {
     using global::MongoDB.Driver;
     using Web.Application.Data.Schemas;
+    using Web.Application.Domain.Dtos;
     using Web.Application.Domain.Entities;
     using Web.Application.Domain.ValueObjects;
+    using ZstdSharp.Unsafe;
 
     public class UsersRepository 
     {
@@ -14,6 +16,16 @@
             _users = mongoDB.DB.GetCollection<UserSchema>("users");
         }
 
+        public async Task<Users> FindByLogin(string email, string password)
+        {
+            var document = _users.AsQueryable().FirstOrDefault(x => x.Email.Equals(email) && x.Password.Equals(password));
+
+            if (document == null)
+                return null;
+
+            return document.ParseToDomain();
+        }
+
         public void Insert(Users users)
         {
             var document = new UserSchema
@@ -22,6 +34,7 @@
                 Email = users.Email,
                 Password = users.Password,
                 Profile = users.Profile,
+                CreateAt = users.CreateAt,
                 Person = new PersonSchema
                 {
                     Biograpphy = users.Person.Biography,
@@ -46,6 +59,7 @@
                     d.Username,
                     d.Email,
                     d.Password,
+                    d.CreateAt,
                     d.Profile);
                 var e = new Person(d.Person.City,
                     d.Person.Country,

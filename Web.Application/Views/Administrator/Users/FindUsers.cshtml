@@ -1,6 +1,6 @@
-﻿@using Web.Application.Controllers.Outputs
+﻿@using Web.Application.Domain.Dtos.Users
 @using Web.Application.Domain.Entities
-@model IEnumerable<Web.Application.Controllers.Outputs.UsersList>
+@model IEnumerable<Web.Application.Domain.Dtos.Users.UserDto>
 <thead>
     <tr>
         <th scope="col">username</th>
@@ -13,7 +13,7 @@
         <th scope="col">update</th>
     </tr>
 </thead>
-@foreach (var item in Model ?? new List<UsersList>())
+@foreach (var item in Model ?? new List<UserDto>())
 {
     <tbody>
         <tr>

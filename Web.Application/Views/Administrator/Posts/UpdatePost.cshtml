@@ -1,0 +1,25 @@
+﻿@model Web.Application.Domain.Dtos.Posts.UpdateDtoPost
+
+@Html.HiddenFor(x => x.Id)
+<div class="row-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.LabelFor(x => x.Title, new { @class = "label-form" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.LabelFor(x => x.Text, new { @class = "label-form" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Text, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="row">
+        <div class="col-md-6">
+        </div>
+    </div>
+</div>
