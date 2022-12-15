@@ -1,34 +1,76 @@
 ﻿
 namespace Web.Application.Controllers
 {
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.IdentityModel.Tokens;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Security.Principal;
     using Web.Application.Data.Repositories;
+    using Web.Application.Domain.Dtos;
     using Web.Application.Domain.Dtos.Posts;
     using Web.Application.Domain.Dtos.Users;
     using Web.Application.Domain.Entities;
     using Web.Application.Domain.Enums;
+    using Web.Application.Domain.Security;
     using Web.Application.Domain.ValueObjects;
 
     public class AdministratorController : Controller
     {
         private readonly UsersRepository _usersRepository;
         private readonly PostsRepository _postRepository;
+        public SigningConfigurations _signingConfigurations;
+
         public AdministratorController(UsersRepository usersRepository,
-            PostsRepository postsRepository)
+            PostsRepository postsRepository,
+                            SigningConfigurations signingConfigurations)
         {
             _usersRepository = usersRepository;
             _postRepository = postsRepository;
-
+            _signingConfigurations = signingConfigurations;
         }
+
         public IActionResult Index()
             => View();
+        
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Login(string Email, string Password)
+        {
+            var login = new LoginDto("jp10y@hotmail.com", "123456");
+
+
+            if (login == null)
+                return BadRequest();
+
+            try
+            {
+                var result = await LoginService(login.Email, login.Password);
+                if(result != null)
+                {
+                    return Ok(result);
+                } else
+                {
+                    return NotFound();
+                }
+            }
+            catch (ArgumentException ex)
+            {
+
+                throw;
+            }
+        }
+        
 
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<IActionResult> UserRegister()
             =>  PartialView("Users/UserRegister");
 
         [HttpPost]
+        [Authorize("Bearer")]
         public async Task<IActionResult> UserRegister(CreateDtoUsers users)
         {
             var profile = EProfileHelper.ParseToInt(users.Profile);
@@ -67,6 +109,7 @@ namespace Web.Application.Controllers
         }
 
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<IActionResult> FindUsers()
         {
             var users = await _usersRepository.GetAll();
@@ -86,6 +129,7 @@ namespace Web.Application.Controllers
         }
 
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _usersRepository.GetById(id);
@@ -102,6 +146,7 @@ namespace Web.Application.Controllers
         }
 
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<IActionResult> GetToUpdate(string id)
         {
             var user = await _usersRepository.GetById(id);
@@ -127,6 +172,7 @@ namespace Web.Application.Controllers
         }
 
         [HttpPost]
+        [Authorize("Bearer")]
         public async Task<IActionResult> UpdateUser(UpdateDtoUsers models)
         {
             var user = await _usersRepository.GetById(models.Id);
@@ -173,10 +219,12 @@ namespace Web.Application.Controllers
 
        
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<IActionResult> PostRegister()
             =>  PartialView("Posts/PostRegister");
 
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<IActionResult> FindPosts()
         {
             var posts = await _postRepository.GetAll();
@@ -194,6 +242,7 @@ namespace Web.Application.Controllers
         }
 
         [HttpPost]
+        [Authorize("Bearer")]
         public async Task<IActionResult> PostRegister(CreateDtoPosts posts)
         {
             var post = new Post(
@@ -222,6 +271,7 @@ namespace Web.Application.Controllers
         }
 
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<IActionResult> PostDelete(string id)
         {
             var post = await _postRepository.GetById(id);
@@ -237,6 +287,92 @@ namespace Web.Application.Controllers
             });
 
         }
+
+        public async Task<object> LoginService(string Email, string Password)
+        {
+            var login = new LoginDto(Email, Password);
+
+            if (login != null
+                && !string.IsNullOrWhiteSpace(login.Email)
+                && !string.IsNullOrWhiteSpace(login.Password))
+            {
+                var baseUser = await _usersRepository.FindByLogin(login.Email, login.Password);
+                if (baseUser == null)
+                {
+                    return new
+                    {
+                        authenticated = false,
+                        message = "Fail authenmtication"
+                    };
+                }
+                else
+                {
+
+                    ClaimsIdentity identity = new ClaimsIdentity(
+                        new GenericIdentity(login.Email),
+                        new[]
+                        {
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                            new Claim(JwtRegisteredClaimNames.UniqueName, login.Email)
+                        }
+                    );
+
+                    var pegar = Environment.GetEnvironmentVariable("Seconds");
+
+                    DateTime createDate = DateTime.UtcNow;
+                    DateTime expirationDate = createDate + TimeSpan.FromSeconds(Convert.ToInt32(Environment.GetEnvironmentVariable("Seconds")));
+
+                    var handler = new JwtSecurityTokenHandler();
+                    string token = CreateToken(identity, createDate, expirationDate, handler);
+                    return SuccessObject(createDate, expirationDate, token, baseUser);
+
+                }
+            }
+            else
+            {
+                return new
+                {
+                    authenticated = false,
+                    message = "Falha ao autenticar"
+                };
+            }
+
+
+        }
+
+        private string CreateToken(ClaimsIdentity identity,
+            DateTime createDate, 
+            DateTime expirationDate,
+            JwtSecurityTokenHandler handler)
+        {
+            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = Environment.GetEnvironmentVariable("Issuer"),
+                Audience = Environment.GetEnvironmentVariable("Audience"),
+                SigningCredentials = _signingConfigurations.SigningCredentials,
+                Subject = identity,
+                NotBefore = createDate,
+                Expires = expirationDate
+            });
+
+            var token = handler.WriteToken(securityToken);
+            return token;
+        }
+
+        private object SuccessObject(DateTime createDate, DateTime expirationDate, string token, Users user)
+        {
+            return new
+            {
+                authenticated = true,
+                create = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                expiration = expirationDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                accessToken = token,
+                userName = user.Email,
+                name = user.Username,
+                message = "Users log-in"
+            };
+        }
+
     }
 
 }

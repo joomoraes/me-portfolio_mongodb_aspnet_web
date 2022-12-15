@@ -2,6 +2,7 @@
 {
     using global::MongoDB.Driver;
     using Web.Application.Data.Schemas;
+    using Web.Application.Domain.Dtos;
     using Web.Application.Domain.Entities;
     using Web.Application.Domain.ValueObjects;
     using ZstdSharp.Unsafe;
@@ -13,6 +14,16 @@
         public UsersRepository(MongoDB mongoDB)
         {
             _users = mongoDB.DB.GetCollection<UserSchema>("users");
+        }
+
+        public async Task<Users> FindByLogin(string email, string password)
+        {
+            var document = _users.AsQueryable().FirstOrDefault(x => x.Email.Equals(email) && x.Password.Equals(password));
+
+            if (document == null)
+                return null;
+
+            return document.ParseToDomain();
         }
 
         public void Insert(Users users)
