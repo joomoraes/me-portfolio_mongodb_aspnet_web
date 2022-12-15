@@ -99,6 +99,8 @@
                 Password = users.Password,
                 Profile = users.Profile,
                 Username = users.Username,
+                CreateAt = users.CreateAt,
+                Token = users.Token,
                 Person = new PersonSchema
                 {
                     Biograpphy = users.Person.Biography,

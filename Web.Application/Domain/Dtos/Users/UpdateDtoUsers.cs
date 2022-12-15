@@ -22,6 +22,7 @@ namespace Web.Application.Domain.Dtos.Users
         public string City { get; set; }
         [Display(Name = "State")]
         public string State { get; set; }
+        public string Token { get; set; }
         [Display(Name = "ZipCode")]
         public string ZipCode { get; set; }
         private DateTime _updateAt;

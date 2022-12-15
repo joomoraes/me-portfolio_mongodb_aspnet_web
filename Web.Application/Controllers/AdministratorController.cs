@@ -5,6 +5,7 @@ namespace Web.Application.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.IdentityModel.Tokens;
     using System.IdentityModel.Tokens.Jwt;
+    using System.Reflection;
     using System.Security.Claims;
     using System.Security.Principal;
     using Web.Application.Data.Repositories;
@@ -297,6 +298,7 @@ namespace Web.Application.Controllers
                 && !string.IsNullOrWhiteSpace(login.Password))
             {
                 var baseUser = await _usersRepository.FindByLogin(login.Email, login.Password);
+
                 if (baseUser == null)
                 {
                     return new
@@ -324,8 +326,33 @@ namespace Web.Application.Controllers
 
                     var handler = new JwtSecurityTokenHandler();
                     string token = CreateToken(identity, createDate, expirationDate, handler);
-                    return SuccessObject(createDate, expirationDate, token, baseUser);
 
+                    var user = await _usersRepository.GetById(baseUser.Id);
+                    var person = _usersRepository.GetById(baseUser.Id).Result.Person;
+
+                    user = new Users(baseUser.Id,
+                        baseUser.Username,
+                        baseUser.Email,
+                        baseUser.Password,
+                        DateTime.Now,
+                        baseUser.Profile,
+                        token);
+                    var personN = new Person(
+                           person.ZipCode,
+                           person.City,
+                           person.State,
+                           person.Country);
+
+                    user.AtributePerson(personN);
+
+                    if (!_usersRepository.Update(user))
+                    {
+                        return BadRequest(new
+                        {
+                            data = "None documents was update!"
+                        });
+                    }
+                    return SuccessObject(createDate, expirationDate, token, baseUser);
                 }
             }
             else
@@ -336,8 +363,6 @@ namespace Web.Application.Controllers
                     message = "Falha ao autenticar"
                 };
             }
-
-
         }
 
         private string CreateToken(ClaimsIdentity identity,
