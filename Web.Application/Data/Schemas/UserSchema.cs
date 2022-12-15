@@ -16,6 +16,7 @@ namespace Web.Application.Data.Schemas
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Token { get; set; }
         public DateTime CreateAt { get; set; }
         public EProfile Profile { get; set; }
         public PersonSchema Person { get; set; }
@@ -32,7 +33,8 @@ namespace Web.Application.Data.Schemas
                 document.Email,
                 document.Password,
                 document.CreateAt,
-                document.Profile
+                document.Profile,
+                document.Token
                 );
 
             var person = new Person( 

@@ -33,7 +33,8 @@
             string _Email,
             string _Password,
             DateTime _createat,
-            EProfile _Profile)
+            EProfile _Profile,
+            string _Token)
         {
             Id = _Id;
             Username = _Username;
@@ -41,6 +42,7 @@
             Password = _Password;
             Profile = _Profile;
             CreateAt = _createat;
+            Token = _Token;
             Posts = new List<Post>();
         }  
         
@@ -68,6 +70,7 @@
         public DateTime CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public EProfile Profile { get; set; }
+        public string Token { get; set; }
         public Person Person { get; set; }
 
         public List<Post> Posts { get; set; }
