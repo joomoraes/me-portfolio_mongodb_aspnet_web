@@ -52,7 +52,7 @@ on:
 
 | input      | required | default      | description                                                      |
 |------------|----------|--------------|------------------------------------------------------------------|
-| `config`   | ❌       | [see docs][] | File path to configuration file                                  |
+| `config`   | ✔       | [see docs][] | File path to configuration file                                  |
 | `dry`      | ❌       | `false`      | Execute in "dry-run" mode                                        |
 | `debug`    | ❌       | `false`      | Output debugging information                                     |
 | `format`   | ❌       | [see docs][] | The Git tag format used by semantic-release to identify releases |
