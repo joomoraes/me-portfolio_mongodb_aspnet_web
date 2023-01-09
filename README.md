@@ -90,5 +90,5 @@ on:
 > **Note**: Ensure `portfolio_wrapper` is set to `false` to better capture the output into a file *(or use your own method)*
 
 > Author: [João Pedro](https://joaopedro.azurewebsites.net/) &bull;
-> Linkedin: [@joomoraes](https://www.linkedin.com/in/joaopedroalvesdemoraes/)
+> Linkedin: [@JoaoPedro](https://www.linkedin.com/in/joaopedroalvesdemoraes/)
 
