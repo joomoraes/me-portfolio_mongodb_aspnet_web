@@ -38,9 +38,10 @@ namespace Web.Application.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(string Email, string Password)
+        public async Task<IActionResult> Login(string Email,
+            string Password)
         {
-            var login = new LoginDto("jp10y@hotmail.com", "123456");
+            var login = new LoginDto(Email, Password);
 
 
             if (login == null)
@@ -69,6 +70,11 @@ namespace Web.Application.Controllers
         [Authorize("Bearer")]
         public async Task<IActionResult> UserRegister()
             =>  PartialView("Users/UserRegister");
+
+        [HttpGet]
+        [Authorize("Bearer")]
+        public async Task<IActionResult> TableStrip()
+            => PartialView();
 
         [HttpPost]
         [Authorize("Bearer")]
@@ -388,6 +394,7 @@ namespace Web.Application.Controllers
         {
             return new
             {
+                userid = user.Id,
                 authenticated = true,
                 create = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 expiration = expirationDate.ToString("yyyy-MM-dd HH:mm:ss"),

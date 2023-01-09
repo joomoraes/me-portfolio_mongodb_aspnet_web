@@ -36,6 +36,17 @@
                     i.MapMember(c => c.Profile).SetSerializer(new EnumSerializer<EProfile>(BsonType.Int32));
                     i.SetIgnoreExtraElements(true);
                 });
+            }       
+            
+            if(!BsonClassMap.IsClassMapRegistered(typeof(LoginSchema)))
+            {
+                BsonClassMap.RegisterClassMap<LoginSchema>(i =>
+                {
+                    i.AutoMap();
+                    i.MapMember(c => c.Id);
+                    i.MapMember(c => c.status).SetSerializer(new EnumSerializer<EStatusLogin>(BsonType.Int32));
+                    i.SetIgnoreExtraElements(true);
+                });
             }
         }
     }

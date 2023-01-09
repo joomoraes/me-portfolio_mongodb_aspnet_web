@@ -9,8 +9,13 @@
     <link rel="stylesheet" href="~/css/Administrator.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Web.Application.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <meta name="google-signin-client_id" content="592865276398-iep0gv1i4hl8hi3dmo32o3brecc7m3u5.apps.googleusercontent.com">
 </head>
 <body>
+    <div id="g_id_onload"
+         data-client_id="592865276398-iep0gv1i4hl8hi3dmo32o3brecc7m3u5.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse">
+    </div>
     <div class="wrapper">
         <header class="header">
             <nav class="main-nav">
@@ -43,6 +48,27 @@
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+
+        function handleCredentialResponse(googleUser) {
+            console.log("ID: " + googleUser.clientId);
+            // Don't send this directly to your server!
+            console.log('Full Name: ' + googleUser.credential);
+            console.log('Given Name: ' + googleUser.credential);
+            console.log('Family Name: ' + googleUser.select_by);
+            console.log(googleUser);
+            // The ID token you need to pass to your backend:
+        };
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
