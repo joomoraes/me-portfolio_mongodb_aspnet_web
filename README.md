@@ -91,5 +91,4 @@ on:
 
 > Author: [João Pedro](https://joaopedro.azurewebsites.net/) &bull;
 > Linkedin: [@joomoraes](https://www.linkedin.com/in/joaopedroalvesdemoraes/)
-[license-url]: LICENSE
-[license-img]: https://badgen.net/github/license/joomoraes/me-portfolio_mongodb_aspnet_web
+
