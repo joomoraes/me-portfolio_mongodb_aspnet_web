@@ -38,7 +38,8 @@ namespace Web.Application.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(string Email, string Password)
+        public async Task<IActionResult> Login(string Email,
+            string Password)
         {
             var login = new LoginDto(Email, Password);
 

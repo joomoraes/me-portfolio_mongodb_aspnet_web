@@ -5,21 +5,40 @@
         display: none;
     }
 </style>
-<div class="login">
+<div class="login" id="login">
     <div class="login-triangle"></div>
     <h2 class="login-header">Log in</h2>
+  
     <div class="login-container">
         <p><input type="email" placeholder="Email" id="usernameLoginReq"></p>
         <p><input type="password" placeholder="Password" id="passwordLoginReq"></p>
         <p><input type="submit" onclick="loginRequest()" value="Log in"></p>
     </div>
 </div>
-<div class="container-fluid" id="tableStrip">
+<div class="container-fluid" id="userRegister">
+</div>
+
+<div class="container-fluid">
+    <table class="table table-dark" id="usersTable">
+    </table>
+</div>
+
+<div class="container-fluid" id="postRegister">
+</div>
+
+<div class="container-fluid">
+    <table class="table table-dark" id="postTable">
+    </table>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
+
+  
+
+
     function loginRequest() {
         $.post({
             url: '@Url.Action("Login", "Administrator")',
@@ -36,32 +55,55 @@
                     confirmButtonText: 'Ok!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        alert(msg.userid);
+                        
+                        $('#login').css('display', 'none');
+
+                        $.get({
+                            url:'@Url.Action("FindPosts", "Administrator")',
+                            headers: { 
+                                Authorization: 'Bearer ' + msg.accessToken
+                            },
+                            success: function (content) {
+                                $("#postTable").html(content);
+                                }
+                            });
+
+                        $.get({
+                            url:'@Url.Action("FindUsers", "Administrator")',
+                            headers: { 
+                                Authorization: 'Bearer ' + msg.accessToken
+                            },
+                            success: function (content) {
+                                $("#usersTable").html(content);
+                                }
+                            });
+
+                        $.get({
+                            url:'@Url.Action("UserRegister", "Administrator")',
+                            headers: {
+                                Authorization: 'Bearer ' + msg.accessToken
+                            },
+                            success: function (content) {
+                                $("#userRegister").html(content);
+                                }
+                            });
+
+                        $.get({
+                            url:'@Url.Action("PostRegister", "Administrator")',
+                            headers: { 
+                                Authorization: 'Bearer ' + msg.accessToken
+                            },
+                            success: function (content) {
+                                $("#postRegister").html(content);
+                                }
+                            });
                     }
                 })
             }
         });
     }
 
-    $.get('@Url.Action("FindPosts", "Administrator")', function (content) {
-        $("#posttables").html(content);
-    });
-
-    $.get('@Url.Action("FindPosts", "Administrator")', function (content) {
-        $("#posttables").html(content);
-    });
-     
-    $.get('@Url.Action("FindUsers", "Administrator")', function (content) {
-        $("#usertable").html(content);
-    });
-
-    $.get('@Url.Action("UserRegister", "Administrator")', function (content) {
-        $("#2a").html(content);
-    }); 
-    
-    $.get('@Url.Action("PostRegister", "Administrator")', function (content) {
-        $("#6a").html(content);
-    });
+  
     
     
 </script>
