@@ -10,6 +10,7 @@ var signingConfigurations = new SigningConfigurations();
 builder.Services.AddSingleton<Web.Application.Data.MongoDB>();
 builder.Services.AddScoped<Web.Application.Data.Repositories.UsersRepository>();
 builder.Services.AddScoped<Web.Application.Data.Repositories.PostsRepository>();
+builder.Services.AddScoped<Web.Application.Data.Repositories.ViewsRepository>();
 builder.Services.AddSingleton(signingConfigurations);
 Environment.SetEnvironmentVariable("Audience", "ExemploAudience");
 Environment.SetEnvironmentVariable("Issuer", "ExemploIssue");
