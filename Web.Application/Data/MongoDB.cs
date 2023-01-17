@@ -48,6 +48,16 @@
                     i.SetIgnoreExtraElements(true);
                 });
             }
+
+            if(!BsonClassMap.IsClassMapRegistered(typeof(ViewsSchema)))
+            {
+                BsonClassMap.RegisterClassMap<ViewsSchema>(i =>
+                {
+                    i.AutoMap();
+                    i.MapMember(c => c.Id);
+                    i.SetIgnoreExtraElements(true);
+                });
+            }
         }
     }
 }

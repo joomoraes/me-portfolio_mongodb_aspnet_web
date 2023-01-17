@@ -49,6 +49,7 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
     <script>
 
         function handleCredentialResponse(googleUser) {
@@ -61,13 +62,44 @@
             // The ID token you need to pass to your backend:
         };
 
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
+        $(document).ready(function()
+        {
+            let latitude = 1.00000;
+            let longitude = 1.00000;
+            let ip = '192.168.172.10';
+            let datetime = new Date();
 
+
+
+
+            /* geolocation is available */
+            navigator.geolocation.getCurrentPosition(function (position) {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+
+                $.get({
+                    url: 'https://l2.io/ip.js?var=userip',
+                    success: function (msg)
+                    {
+                        console.log(msg);
+                    }
+                });
+
+                $.post({
+                    url: '@Url.Action("NewVisitor", "Home")',
+                    data: {
+                        Longitude: position.coords.longitude,
+                        Latitude: position.coords.latitude,
+                        UserIp: ip,
+                        createDate: datetime
+                    },
+                    success: function (msg) {
+                        console.log('Success register new visitor');
+                    }
+                });
+            });
+
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
