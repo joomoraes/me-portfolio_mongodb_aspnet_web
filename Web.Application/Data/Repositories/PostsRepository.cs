@@ -25,6 +25,7 @@ namespace Web.Application.Data.Repositories
                 Text = post.Text,
                 Title = post.Title,
                 UserId = post.UserId,
+                LinkImage = post.LinkImage,
                 CreateAt = DateTime.Now
             };
 
@@ -57,6 +58,7 @@ namespace Web.Application.Data.Repositories
                     _.Post[0].Image,
                     _.Post[0].UserId,
                     _.Post[0].Relevance,
+                    _.Post[0].LinkImage,
                     _.Post[0].CreateAt);
 
                 ret.Add(userPosts, _.AverageRelevance);
@@ -76,6 +78,7 @@ namespace Web.Application.Data.Repositories
                     d.Text,
                     d.Title,
                     d.UserId,
+                    d.LinkImage,
                     d.CreateAt
                     );
 

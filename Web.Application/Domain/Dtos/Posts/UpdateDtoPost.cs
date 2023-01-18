@@ -14,5 +14,9 @@ namespace Web.Application.Domain.Dtos.Posts
         public string Image { get; set; }
         [Display(Name = "Relevance")]
         public int Relevance { get; set; }
+
+        [Display(Name = "Link Image")]
+        public string LinkImage { get; set; }
+
     }
 }

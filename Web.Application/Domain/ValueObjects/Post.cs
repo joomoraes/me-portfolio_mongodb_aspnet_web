@@ -13,12 +13,14 @@ namespace Web.Application.Domain.ValueObjects
          string title,
          string text,
          string image,
+         string linkImage,
          DateTime createat)
         {
             Id = id;
             Title = title;
             Text = text;
             Image = image;
+            LinkImage = linkImage;
             CreateAt = createat;
         }
 
@@ -27,6 +29,7 @@ namespace Web.Application.Domain.ValueObjects
             string text,
             string image,
             int relevance,
+            string linkImage,
             DateTime createat,
             string userid)
         {
@@ -34,6 +37,7 @@ namespace Web.Application.Domain.ValueObjects
             Title = title;
             Text = text;
             Image = image;
+            LinkImage = linkImage;
             Relevance = relevance;
             CreateAt = createat;
         }
@@ -44,6 +48,7 @@ namespace Web.Application.Domain.ValueObjects
            string text,
            string image,
            int relevance,
+           string LinkImage,
            DateTime createat)
         {
             Id = id;
@@ -60,6 +65,7 @@ namespace Web.Application.Domain.ValueObjects
         public string Text { get; set; }
         public string Image { get; set; }
         public int Relevance { get; set; }
+        public string LinkImage { get; set; }
         public DateTime CreateAt { get; set; }
         public ValidationResult ValidationResult { get; set; }
 

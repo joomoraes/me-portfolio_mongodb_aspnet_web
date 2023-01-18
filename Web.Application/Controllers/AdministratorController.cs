@@ -228,13 +228,17 @@ namespace Web.Application.Controllers
         [HttpGet]
         [Authorize("Bearer")]
         public async Task<IActionResult> PostRegister()
-            =>  PartialView("Posts/PostRegister");
+        {
+            ViewBag.Token = _usersRepository.GetById("638671fc2a61c98808e19051").Result.Token;
+            return PartialView("Posts/PostRegister");
+        }
 
         [HttpGet]
         [Authorize("Bearer")]
         public async Task<IActionResult> FindPosts()
         {
             var posts = await _postRepository.GetAll();
+
 
             var list = posts.Select(_ => new PostDto
             {
@@ -257,6 +261,7 @@ namespace Web.Application.Controllers
                 posts.Text,
                 posts.Image.ToString(),
                 1,
+                posts.LinkImage,
                 DateTime.Now,
                 posts.UserId
                 );

@@ -42,14 +42,24 @@
 
 <!-- Info Section -->
 <section class="info">
-    <img src="https://image.ibb.co/j4Qz8x/pic1.jpg" alt="">
-    <div>
-        <h2>Your Business On The Web</h2>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae alias reiciendis deleniti possimus nemo non repellendus?
-            Quae atque vero modi quidem! Autem cupiditate fugit doloribus ad amet, asperiores provident commodi.
-        </p>
-        <a href="#" class="btn">Learn More</a>
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner" id="infocarousel">
+            
+       
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 </section>
 
@@ -65,3 +75,18 @@
     <img src="https://source.unsplash.com/random/207x200" alt="">
     <img src="https://source.unsplash.com/random/208x200" alt="">
 </section>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+<script>
+
+    $(document).ready(function(){
+        $.get({
+            url: '@Url.Action("GetPosts","Home")',
+            success: function(result)
+            {
+                $('#infocarousel').html(result);
+            }
+        });
+    })
+
+</script>

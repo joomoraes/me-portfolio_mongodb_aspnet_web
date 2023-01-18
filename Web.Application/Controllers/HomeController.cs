@@ -5,8 +5,10 @@
     using System.Diagnostics;
     using System.Net.Http.Headers;
     using Web.Application.Data.Repositories;
+    using Web.Application.Domain.Dtos.Posts;
     using Web.Application.Domain.Dtos.Views;
     using Web.Application.Domain.Entities;
+    using Web.Application.Domain.ValueObjects;
     using Web.Application.Models;
 
     public class HomeController : Controller
@@ -94,5 +96,27 @@
             }
             
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetPosts()
+        {
+            var posts = _postRepository.GetAll();
+            var document = new List<PostDto>();
+            foreach (var item in posts.Result.ToList() ?? new List<Post>())
+            {
+                document.Add(new PostDto()
+                {
+                    CreateAt = item.CreateAt,
+                    Image = item.Image,
+                    LinkImage = item.LinkImage,
+                    Text = item.Text,
+                    Title = item.Title
+                });
+            }
+
+            return PartialView(document);
+        }
+
     }
 }

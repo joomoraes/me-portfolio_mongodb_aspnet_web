@@ -1,0 +1,15 @@
+﻿@using Web.Application.Domain.Dtos.Posts
+@model IEnumerable<Web.Application.Domain.Dtos.Posts.PostDto>
+
+@foreach(var item in Model ?? new List<PostDto>())
+{
+    <div class="carousel-item active">
+        <img src="@item.LinkImage" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+            <h5>@item.Title</h5>
+            <p>@item.Text</p>
+        </div>
+    </div>
+}
+        
+    

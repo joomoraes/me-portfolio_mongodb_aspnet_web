@@ -11,6 +11,10 @@
         <label for="InputText">Text</label>
         <textarea type="text" class="form-control" id="inputText" placeholder="Text" rows="5"></textarea>
     </div>
+    <div class="form-group col-md-4">
+        <label for="inputLinkImage">Link Image</label>
+        <input type="text" class="form-control" id="inputLinkImage" placeholder="Link Image" />
+    </div>
 </div>
 <div class="row">
     <label for="InputImage">Image</label>
@@ -23,7 +27,6 @@
 <script>
 
     function PostInsert() {
-
         var file = document.getElementById("InputImage").files[0];
         var reader = new FileReader();
         reader.readAsDataURL(file);
@@ -32,10 +35,14 @@
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("PostRegister", "Administrator")',
+                headers: {
+                    Authorization: 'Bearer ' + '@ViewBag.Token'
+                },
                 data: {
                     UserId: $('#InputUserid').val(),
                     Title: $('#inputTitle').val(),
                     Text: $('#inputText').val(),
+                    LinkImage: $('#inputLinkImage').val(),
                     Image: reader.result
                 },
                 success: function (msg) {

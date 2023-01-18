@@ -17,6 +17,8 @@
         public string Text { get; set; }
         public string Image { get; set; }
         public int Relevance { get; set; }
+
+        public string LinkImage { get; set; }
         public DateTime CreateAt { get; set; }
 
     }
@@ -25,7 +27,14 @@
     {
         public static Post ParseToDomain(this PostSchema document)
         {
-            return new Post(document.Title, document.Text, document.Image, document.Relevance, document.CreateAt, document.UserId);
+            return new Post(document.Title,
+                document.Text,
+                document.Image, 
+                document.Relevance, 
+                document.LinkImage,
+                document.CreateAt, 
+                document.UserId
+                );
         }
     }
 
